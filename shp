@@ -1,0 +1,25 @@
+#!/bin/sh
+
+SHPCWD=$(dirname $0)
+SHPCMD=$(basename $0)
+SHPSUB=$1
+
+if [ -z "$SHPSUB" ]; then 
+	if [ -d "$SHPCWD/.$SHPCMD/..." ]; then
+		#FIXME should tailcall-- cat'ting $SHPSUB/... if it exists
+		ls -1 "$SHPCWD/.$SHPCMD/$SHPSUB"
+	elif [ -e "$SHPCWD/.$SHPCMD/..." ]; then
+		cat "$SHPCWD/.$SHPCMD/..."
+	else
+		ls -1a "$SHPCWD/.$SHPCMD"
+	fi
+elif [ -d "$SHPCWD/.$SHPCMD/$SHPSUB" ]; then
+	#FIXME should tailcall-- cat'ting $SHPSUB/... if it exists
+	ls -1a "$SHPCWD/.$SHPCMD/$SHPSUB"
+elif [ -x "$SHPCWD/.$SHPCMD/$SHPSUB" ]; then
+	#FIXME need to strip leading token from $@
+	$SHPCWD/.$SHPCMD/$SHPSUB "$@";
+elif [ -e "$SHPCWD/.$SHPCMD/$SHPSUB" ]; then
+	cat "$SHPCWD/.$SHPCMD/$SHPSUB"
+fi
+
